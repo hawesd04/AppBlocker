@@ -46,6 +46,11 @@ def unblock(filepath):
                 file.write(line)
         
 
+
+'''
+    Main method, checks for admin priviledge, grants it if not available, and blocks access
+    starts timer, and ends block after sleep period.
+'''
 if __name__ == "__main__": 
     if (is_admin()):
         filepath = r"C:\Windows\System32\drivers\etc\hosts"
@@ -55,6 +60,12 @@ if __name__ == "__main__":
             "\n127.0.0.1 discordapp.com #discord-blocker",
             "\n127.0.0.1 discord.co #discord-blocker",
             "\n127.0.0.1 dis.gd #discord-blocker",
+            "\n127.0.0.1 x.com #discord-blocker",
+            "\n127.0.0.1 x.com #discord-blocker",
+            "\n127.0.0.1 www.x.com #discord-blocker",
+            "\n127.0.0.1 twitter.com #discord-blocker",
+            "\n127.0.0.1 www.twitter.com #discord-blocker",
+            "\n127.0.0.1 t.co #discord-blocker",
         ]
 
         factor = -1
