@@ -55,11 +55,11 @@ if __name__ == "__main__":
     if (is_admin()):
         filepath = r"C:\Windows\System32\drivers\etc\hosts"
         block_string = [
-            "\n127.0.0.1 discord.com #discord-blocker",
-            "\n127.0.0.1 discord.gg #discord-blocker",
-            "\n127.0.0.1 discordapp.com #discord-blocker",
-            "\n127.0.0.1 discord.co #discord-blocker",
-            "\n127.0.0.1 dis.gd #discord-blocker",
+            # "\n127.0.0.1 discord.com #discord-blocker",
+            # "\n127.0.0.1 discord.gg #discord-blocker",
+            # "\n127.0.0.1 discordapp.com #discord-blocker",
+            # "\n127.0.0.1 discord.co #discord-blocker",
+            # "\n127.0.0.1 dis.gd #discord-blocker",
             "\n127.0.0.1 x.com #discord-blocker",
             "\n127.0.0.1 x.com #discord-blocker",
             "\n127.0.0.1 www.x.com #discord-blocker",
