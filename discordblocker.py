@@ -3,7 +3,11 @@ import ctypes
 import os
 import sys
 import time
+from datetime import datetime
 
+from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QFrame, QTimeEdit, QProgressBar
+from PySide6.QtCore import QSize, Qt, QDateTime, QTime
+from block_mainwindow_ui import Ui_MainWindow
 
 def flushdns():
     try:
@@ -46,28 +50,10 @@ def unblock(filepath):
                 file.write(line)
         
 
-
-'''
-    Main method, checks for admin priviledge, grants it if not available, and blocks access
-    starts timer, and ends block after sleep period.
-'''
-if __name__ == "__main__": 
+def run_block(duration_temp, block_string, filepath):
     if (is_admin()):
-        filepath = r"C:\Windows\System32\drivers\etc\hosts"
-        block_string = [
-            # "\n127.0.0.1 discord.com #discord-blocker",
-            # "\n127.0.0.1 discord.gg #discord-blocker",
-            # "\n127.0.0.1 discordapp.com #discord-blocker",
-            # "\n127.0.0.1 discord.co #discord-blocker",
-            # "\n127.0.0.1 dis.gd #discord-blocker",
-            "\n127.0.0.1 x.com #discord-blocker",
-            "\n127.0.0.1 x.com #discord-blocker",
-            "\n127.0.0.1 www.x.com #discord-blocker",
-            "\n127.0.0.1 twitter.com #discord-blocker",
-            "\n127.0.0.1 www.twitter.com #discord-blocker",
-            "\n127.0.0.1 t.co #discord-blocker",
-        ]
-
+        # print(block_string)
+        # print(filepath)
         factor = -1
         while (factor != 0 and factor != 1):
             factor = int(input('Minutes (0) or Hours (1): '))
@@ -116,4 +102,104 @@ if __name__ == "__main__":
             None,                       # lpDirectory (none is current)
             1                           # nshowcmd: 1 menas showNormal (window)
         )
+
+
+class MainWindow(QMainWindow, Ui_MainWindow):
+    def __init__(self):
+        super().__init__()
+
+        # use compiled ui
+        self.setupUi(self)
+
+        self.duration = 0
+
+        self.setWindowTitle("Application Blocker")
+        self.setMinimumSize(465,410)
+        self.setMaximumSize(465,410)
+
+        
+        self.durationEdit.timeChanged.connect(self.duration_edit_changed)
+        self.endTimeEdit.timeChanged.connect(self.end_time_edit_changed)
+
+    def duration_edit_changed(self):
+        durEditObj = self.durationEdit.time()
+
+        durationStr = durEditObj.toString()
+        hours = durEditObj.hour()
+        minutes = durEditObj.minute()
+
+        self.duration = (hours * 3600) + (minutes * 60)
+        self.selectedDurationLabel.setText(f"Blocking for a duration of: {durationStr[:-3]}")
+
+    def seconds_until(self, qtime):
+        now = QDateTime.currentDateTime()
+        target = QDateTime(now.date(), qtime)
+        print(f"the time is currently {now}, and the target is {target}")
+        if target <= now:
+            target = target.addDays(1)
+
+        return now.secsTo(target)
     
+    def end_time_edit_changed(self):
+        now = datetime.now()
+
+        print("heyyyy")
+        print(datetime.now().time())
+        self.duration = self.seconds_until(self.endTimeEdit.time())
+
+        print(f"the duration is: {self.duration} seconds")
+
+        hours = self.duration // 3600
+        minutes = (self.duration % 3600) // 60
+
+        minuteStr = ""
+        if (minutes < 10):
+            minuteStr=f"0{minutes}"
+        else: minuteStr =f"{minutes}"
+
+        hourStr = ""
+        if (hours < 10):
+            hourStr=f"0{hours}"
+        else: hourStr =f"{hours}"
+
+        self.selectedDurationLabel.setText(f"Blocking for a duration of: {hours}:{minutes}")
+
+
+
+        
+
+
+'''
+    Main method, checks for admin priviledge, grants it if not available, and blocks access
+    starts timer, and ends block after sleep period.
+'''
+if __name__ == "__main__": 
+
+    filepath = r"C:\Windows\System32\drivers\etc\hosts"
+    block_string = [
+        # "\n127.0.0.1 discord.com #discord-blocker",
+        # "\n127.0.0.1 discord.gg #discord-blocker",
+        # "\n127.0.0.1 discordapp.com #discord-blocker",
+        # "\n127.0.0.1 discord.co #discord-blocker",
+        # "\n127.0.0.1 dis.gd #discord-blocker",
+        "\n127.0.0.1 x.com #twitter-blocker",
+        "\n127.0.0.1 www.x.com #twitter-blocker",
+        "\n127.0.0.1 twitter.com #twitter-blocker",
+        "\n127.0.0.1 www.twitter.com #twitter-blocker",
+        "\n127.0.0.1 t.co #twitter-blocker",
+    ]
+
+    # You need one QApplication instance per application.
+    # Passing sys.argv allows command line args for the application.
+    # If no command line, use QApplication([])
+    app = QApplication(sys.argv)
+
+    # Create a Qt widget (window)
+    window = MainWindow()
+    window.show() # enables window visibility
+
+    # Starts the QApplication event loop!
+    app.exec()
+
+    # this code beyond exec does not get executed until when the application end event is called.
+    # run_block(300, block_string, filepath)
