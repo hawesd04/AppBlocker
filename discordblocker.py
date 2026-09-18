@@ -112,14 +112,87 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
 
         self.duration = 0
+        self.block_string = "[]"
+        self.blockOpts = {
+            'twitter': 
+                "\n127.0.0.1 x.com #twitter-blocker" +
+                "\n127.0.0.1 www.x.com #twitter-blocker" +
+                "\n127.0.0.1 twitter.com #twitter-blocker" +
+                "\n127.0.0.1 www.twitter.com #twitter-blocker" +
+                "\n127.0.0.1 t.co #twitter-blocker",
+            'discord':         
+                "\n127.0.0.1 discord.com #discord-blocker" +
+                "\n127.0.0.1 discord.gg #discord-blocker" +
+                "\n127.0.0.1 discordapp.com #discord-blocker" +
+                "\n127.0.0.1 discord.co #discord-blocker" +
+                "\n127.0.0.1 dis.gd #discord-blocker",
+            'telegram': 
+                "\n127.0.0.1 web.telegram.org #telegram-blocker",
+            'youtube': 
+                "\n127.0.0.1 youtube.com #youtube-blocker" +
+                "\n127.0.0.1 www.youtube.com #youtube-blocker",}
+        
+        self.blockStatus = {
+            'twitter': False,
+            'discord': False,
+            'telegram': False,
+            'youtube': False,
+        }
 
         self.setWindowTitle("Application Blocker")
         self.setMinimumSize(465,410)
         self.setMaximumSize(465,410)
 
+        self.startButton.setDisabled(True)
+        self.startButton.clicked.connect(self.begin_blocking_clicked)
         
         self.durationEdit.timeChanged.connect(self.duration_edit_changed)
         self.endTimeEdit.timeChanged.connect(self.end_time_edit_changed)
+
+
+        self.discordCheck.checkStateChanged.connect(self.discord_toggled)
+        self.twitterCheck.checkStateChanged.connect(self.twitter_toggled)
+        self.telegramCheck.checkStateChanged.connect(self.telegram_toggled)
+        self.youtubeCheck.checkStateChanged.connect(self.youtube_toggled)
+
+        self.progressFrame.setHidden(True)
+
+    def build_string(self):
+        block_string = ""
+        for key, value in self.blockStatus.items():
+            if (value):
+                block_string += self.blockOpts[key]
+
+        print(f"The constructed block string is now:\n---------------------------------------\n{block_string}\n---------------------------------------")
+        return block_string
+
+    # ---------------------------------------------------------------------------------
+
+    def discord_toggled(self):
+        print("discord toggled")
+        self.blockStatus["discord"] = self.discordCheck.isChecked()
+
+    def twitter_toggled(self):
+        print("twitter toggled")
+        self.blockStatus["twitter"] = self.twitterCheck.isChecked()
+
+    def telegram_toggled(self):
+        print("telegram toggled")
+        self.blockStatus["telegram"] = self.telegramCheck.isChecked()
+
+    def youtube_toggled(self):
+        print("youtube toggled")
+        self.blockStatus["youtube"] = self.youtubeCheck.isChecked()
+
+    # ---------------------------------------------------------------------------------
+
+    def begin_blocking_clicked(self):
+        self.block_string = self.build_string()
+        #print(self.block_string)
+
+        print(f"Begin Blocking...")
+
+        self.progressFrame.setHidden(False)
 
     def duration_edit_changed(self):
         durEditObj = self.durationEdit.time()
@@ -130,6 +203,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.duration = (hours * 3600) + (minutes * 60)
         self.selectedDurationLabel.setText(f"Blocking for a duration of: {durationStr[:-3]}")
+
+        if (self.duration > 0):
+            self.startButton.setDisabled(False)
 
     def seconds_until(self, qtime):
         now = QDateTime.currentDateTime()
@@ -146,6 +222,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         print("heyyyy")
         print(datetime.now().time())
         self.duration = self.seconds_until(self.endTimeEdit.time())
+
+        if (self.duration > 0):
+            self.startButton.setDisabled(False)
 
         print(f"the duration is: {self.duration} seconds")
 

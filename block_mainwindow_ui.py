@@ -27,10 +27,10 @@ class Ui_MainWindow(object):
         MainWindow.resize(595, 484)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
-        self.widget = QWidget(self.centralwidget)
-        self.widget.setObjectName(u"widget")
-        self.widget.setGeometry(QRect(10, 230, 441, 26))
-        self.horizontalLayout = QHBoxLayout(self.widget)
+        self.layoutWidget = QWidget(self.centralwidget)
+        self.layoutWidget.setObjectName(u"layoutWidget")
+        self.layoutWidget.setGeometry(QRect(10, 230, 441, 26))
+        self.horizontalLayout = QHBoxLayout(self.layoutWidget)
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
         self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
@@ -41,7 +41,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout.addItem(self.horizontalSpacer_5)
 
-        self.startButton = QPushButton(self.widget)
+        self.startButton = QPushButton(self.layoutWidget)
         self.startButton.setObjectName(u"startButton")
 
         self.horizontalLayout.addWidget(self.startButton)
@@ -50,7 +50,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout.addItem(self.horizontalSpacer_2)
 
-        self.cancelButton = QPushButton(self.widget)
+        self.cancelButton = QPushButton(self.layoutWidget)
         self.cancelButton.setObjectName(u"cancelButton")
 
         self.horizontalLayout.addWidget(self.cancelButton)
@@ -73,32 +73,32 @@ class Ui_MainWindow(object):
         self.blockAppLabel = QLabel(self.app_select_frame)
         self.blockAppLabel.setObjectName(u"blockAppLabel")
         self.blockAppLabel.setGeometry(QRect(10, 10, 161, 16))
-        self.widget1 = QWidget(self.app_select_frame)
-        self.widget1.setObjectName(u"widget1")
-        self.widget1.setGeometry(QRect(0, 40, 441, 41))
-        self.horizontalLayout_3 = QHBoxLayout(self.widget1)
+        self.layoutWidget1 = QWidget(self.app_select_frame)
+        self.layoutWidget1.setObjectName(u"layoutWidget1")
+        self.layoutWidget1.setGeometry(QRect(0, 40, 441, 41))
+        self.horizontalLayout_3 = QHBoxLayout(self.layoutWidget1)
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
         self.horizontalSpacer_14 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
 
         self.horizontalLayout_3.addItem(self.horizontalSpacer_14)
 
-        self.discordCheck = QCheckBox(self.widget1)
+        self.discordCheck = QCheckBox(self.layoutWidget1)
         self.discordCheck.setObjectName(u"discordCheck")
 
         self.horizontalLayout_3.addWidget(self.discordCheck)
 
-        self.twitterCheck = QCheckBox(self.widget1)
+        self.twitterCheck = QCheckBox(self.layoutWidget1)
         self.twitterCheck.setObjectName(u"twitterCheck")
 
         self.horizontalLayout_3.addWidget(self.twitterCheck)
 
-        self.youtubeCheck = QCheckBox(self.widget1)
+        self.youtubeCheck = QCheckBox(self.layoutWidget1)
         self.youtubeCheck.setObjectName(u"youtubeCheck")
 
         self.horizontalLayout_3.addWidget(self.youtubeCheck)
 
-        self.telegramCheck = QCheckBox(self.widget1)
+        self.telegramCheck = QCheckBox(self.layoutWidget1)
         self.telegramCheck.setObjectName(u"telegramCheck")
 
         self.horizontalLayout_3.addWidget(self.telegramCheck)
@@ -107,13 +107,13 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_3.addItem(self.horizontalSpacer_15)
 
-        self.progressframe = QFrame(self.centralwidget)
-        self.progressframe.setObjectName(u"progressframe")
-        self.progressframe.setGeometry(QRect(10, 280, 441, 111))
-        self.progressframe.setMinimumSize(QSize(441, 111))
-        self.progressframe.setFrameShape(QFrame.Shape.StyledPanel)
-        self.progressframe.setFrameShadow(QFrame.Shadow.Raised)
-        self.gridLayout = QGridLayout(self.progressframe)
+        self.progressFrame = QFrame(self.centralwidget)
+        self.progressFrame.setObjectName(u"progressFrame")
+        self.progressFrame.setGeometry(QRect(10, 280, 441, 111))
+        self.progressFrame.setMinimumSize(QSize(441, 111))
+        self.progressFrame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.progressFrame.setFrameShadow(QFrame.Shadow.Raised)
+        self.gridLayout = QGridLayout(self.progressFrame)
         self.gridLayout.setObjectName(u"gridLayout")
         self.horizontalLayout_4 = QHBoxLayout()
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
@@ -125,7 +125,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_4.addItem(self.horizontalSpacer_7)
 
-        self.progressLabel = QLabel(self.progressframe)
+        self.progressLabel = QLabel(self.progressFrame)
         self.progressLabel.setObjectName(u"progressLabel")
         self.progressLabel.setMinimumSize(QSize(184, 20))
 
@@ -142,7 +142,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addLayout(self.horizontalLayout_4, 0, 0, 1, 1)
 
-        self.progressBar = QProgressBar(self.progressframe)
+        self.progressBar = QProgressBar(self.progressFrame)
         self.progressBar.setObjectName(u"progressBar")
         self.progressBar.setValue(24)
 
@@ -154,13 +154,13 @@ class Ui_MainWindow(object):
         self.time_select_frame.setMinimumSize(QSize(441, 101))
         self.time_select_frame.setFrameShape(QFrame.Shape.StyledPanel)
         self.time_select_frame.setFrameShadow(QFrame.Shadow.Raised)
-        self.widget2 = QWidget(self.time_select_frame)
-        self.widget2.setObjectName(u"widget2")
-        self.widget2.setGeometry(QRect(0, 0, 441, 71))
-        self.horizontalLayout_2 = QHBoxLayout(self.widget2)
+        self.layoutWidget2 = QWidget(self.time_select_frame)
+        self.layoutWidget2.setObjectName(u"layoutWidget2")
+        self.layoutWidget2.setGeometry(QRect(0, 0, 441, 71))
+        self.horizontalLayout_2 = QHBoxLayout(self.layoutWidget2)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.LeftTimeFrame = QFrame(self.widget2)
+        self.LeftTimeFrame = QFrame(self.layoutWidget2)
         self.LeftTimeFrame.setObjectName(u"LeftTimeFrame")
         self.LeftTimeFrame.setMinimumSize(QSize(217, 69))
         self.LeftTimeFrame.setFrameShape(QFrame.Shape.StyledPanel)
@@ -174,7 +174,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_2.addWidget(self.LeftTimeFrame)
 
-        self.RightTimeFrame = QFrame(self.widget2)
+        self.RightTimeFrame = QFrame(self.layoutWidget2)
         self.RightTimeFrame.setObjectName(u"RightTimeFrame")
         self.RightTimeFrame.setMinimumSize(QSize(216, 69))
         self.RightTimeFrame.setFrameShape(QFrame.Shape.StyledPanel)
@@ -188,10 +188,10 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_2.addWidget(self.RightTimeFrame)
 
-        self.widget3 = QWidget(self.time_select_frame)
-        self.widget3.setObjectName(u"widget3")
-        self.widget3.setGeometry(QRect(0, 80, 441, 22))
-        self.horizontalLayout_6 = QHBoxLayout(self.widget3)
+        self.layoutWidget3 = QWidget(self.time_select_frame)
+        self.layoutWidget3.setObjectName(u"layoutWidget3")
+        self.layoutWidget3.setGeometry(QRect(0, 80, 441, 22))
+        self.horizontalLayout_6 = QHBoxLayout(self.layoutWidget3)
         self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
         self.horizontalLayout_6.setContentsMargins(0, 0, 0, 0)
         self.horizontalSpacer_17 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
@@ -202,7 +202,7 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_6.addItem(self.horizontalSpacer_16)
 
-        self.selectedDurationLabel = QLabel(self.widget3)
+        self.selectedDurationLabel = QLabel(self.layoutWidget3)
         self.selectedDurationLabel.setObjectName(u"selectedDurationLabel")
 
         self.horizontalLayout_6.addWidget(self.selectedDurationLabel)
@@ -239,7 +239,7 @@ class Ui_MainWindow(object):
         self.youtubeCheck.setText(QCoreApplication.translate("MainWindow", u"YouTube", None))
         self.telegramCheck.setText(QCoreApplication.translate("MainWindow", u"Telegram", None))
         self.progressLabel.setText(QCoreApplication.translate("MainWindow", u"Blocking Progress: 00:00 remaining", None))
-        self.label.setText(QCoreApplication.translate("MainWindow", u"Set Duration", None))
+        self.label.setText(QCoreApplication.translate("MainWindow", u"Set Duration (hh:mm)", None))
         self.durationEdit.setDisplayFormat(QCoreApplication.translate("MainWindow", u"hh:mm", None))
         self.set_endtime_label.setText(QCoreApplication.translate("MainWindow", u"Set End Time", None))
         self.endTimeEdit.setDisplayFormat(QCoreApplication.translate("MainWindow", u"hh:mm AP", None))

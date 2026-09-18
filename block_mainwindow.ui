@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -145,7 +145,7 @@
       <string>Choose Apps to Block</string>
      </property>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>0</x>
@@ -212,7 +212,7 @@
      </layout>
     </widget>
    </widget>
-   <widget class="QFrame" name="progressframe">
+   <widget class="QFrame" name="progressFrame">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -333,7 +333,7 @@
     <property name="frameShadow">
      <enum>QFrame::Shadow::Raised</enum>
     </property>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>0</x>
@@ -367,7 +367,7 @@
           </rect>
          </property>
          <property name="text">
-          <string>Set Duration</string>
+          <string>Set Duration (hh:mm)</string>
          </property>
         </widget>
         <widget class="QTimeEdit" name="durationEdit">
@@ -429,7 +429,7 @@
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>0</x>
