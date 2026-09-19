@@ -6,7 +6,8 @@ import time
 from datetime import datetime
 
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QFrame, QTimeEdit, QProgressBar
-from PySide6.QtCore import QSize, Qt, QDateTime, QTime
+from PySide6.QtCore import QSize, Qt, QDateTime, QTimer
+from PySide6.QtGui import QCloseEvent
 from block_mainwindow_ui import Ui_MainWindow
 
 def flushdns():
@@ -27,8 +28,10 @@ def flushdns():
 
 def is_admin():
     try:
+        print("trying to determine admin status\n")
         return ctypes.windll.shell32.IsUserAnAdmin()
     except:
+        print("user is not an admin\n")
         return False
     
 
@@ -38,16 +41,19 @@ def block(filepath, block_string):
         file.writelines(block_string);
 
 def unblock(filepath):
-    print(f'unblocking discord in filepath: {filepath}')
-    lines = ''
+    BLOCK_TAGS = ("#discord-blocker", "#telegram-blocker", "#twitter-blocker", "#youtube-blocker")
+    with open(filepath, "r") as file:
+        lines = file.readlines()
 
-    with open(filepath, "r") as file: 
-        lines = file.readlines();
+    # keep a list of all lines in lines where any of the above blocked tags are not included.
+    kept = [line for line in lines if not any(tag in line for tag in BLOCK_TAGS)]
+
+    # drop the blank lines left behind by additions to block_string
+    while kept and kept[-1].strip() == "":
+        kept.pop()
 
     with open(filepath, "w") as file:
-        for line in lines:
-            if "#discord-blocker" not in line:
-                file.write(line)
+        file.writelines(kept)
         
 
 def run_block(duration_temp, block_string, filepath):
@@ -112,6 +118,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
 
         self.duration = 0
+        self.end_time = 0
+        self.progressBar.setValue(0)
+
+        self.block_timer = QTimer(self)
+        self.block_timer.setInterval(1000)
+        self.block_timer.timeout.connect(self.on_block_tick)
+
+        self.cancel = False
         self.block_string = "[]"
         self.blockOpts = {
             'twitter': 
@@ -138,6 +152,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             'telegram': False,
             'youtube': False,
         }
+        # self.filepath = r"C:\Windows\System32\drivers\etc\hosts"
+        self.filepath = r"C:\Users\hawes_gihs\Desktop\Local Programming\DiscordBlocker\hosts"
 
         self.setWindowTitle("Application Blocker")
         self.setMinimumSize(465,410)
@@ -145,6 +161,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.startButton.setDisabled(True)
         self.startButton.clicked.connect(self.begin_blocking_clicked)
+
+        self.cancelButton.setDisabled(True)
+        self.cancelButton.clicked.connect(self.cancel_blocking_clicked)
         
         self.durationEdit.timeChanged.connect(self.duration_edit_changed)
         self.endTimeEdit.timeChanged.connect(self.end_time_edit_changed)
@@ -186,6 +205,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     # ---------------------------------------------------------------------------------
 
+    def cancel_blocking_clicked(self):
+        self.end_blocking()
+
+    def on_block_tick(self):
+        remaining = self.end_time - time.monotonic()
+        percent = min(100, (1 - remaining / self.duration) * 100)
+        self.progressBar.setValue(int(percent))
+
+        if (remaining <= 0):
+            self.end_blocking()
+
     def begin_blocking_clicked(self):
         self.block_string = self.build_string()
         #print(self.block_string)
@@ -193,6 +223,21 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         print(f"Begin Blocking...")
 
         self.progressFrame.setHidden(False)
+        self.cancelButton.setDisabled(False)
+
+        print(f'Blocked time set to {self.duration} seconds' )
+
+        block(self.filepath, self.block_string)
+        self.end_time = time.monotonic() + self.duration
+        self.block_timer.start()
+
+    def end_blocking(self):
+        self.block_timer.stop()
+        unblock(self.filepath)
+        flushdns()
+        self.cancelButton.setDisabled(True)
+        self.progressFrame.setHidden(True) 
+
 
     def duration_edit_changed(self):
         durEditObj = self.durationEdit.time()
@@ -243,6 +288,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.selectedDurationLabel.setText(f"Blocking for a duration of: {hours}:{minutes}")
 
+    def closeEvent(self, event: QCloseEvent):
+        print("closing program")
+        if self.block_timer.isActive():
+            self.end_blocking()
+        super().closeEvent(event)
+
 
 
         
@@ -253,21 +304,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     starts timer, and ends block after sleep period.
 '''
 if __name__ == "__main__": 
-
-    filepath = r"C:\Windows\System32\drivers\etc\hosts"
-    block_string = [
-        # "\n127.0.0.1 discord.com #discord-blocker",
-        # "\n127.0.0.1 discord.gg #discord-blocker",
-        # "\n127.0.0.1 discordapp.com #discord-blocker",
-        # "\n127.0.0.1 discord.co #discord-blocker",
-        # "\n127.0.0.1 dis.gd #discord-blocker",
-        "\n127.0.0.1 x.com #twitter-blocker",
-        "\n127.0.0.1 www.x.com #twitter-blocker",
-        "\n127.0.0.1 twitter.com #twitter-blocker",
-        "\n127.0.0.1 www.twitter.com #twitter-blocker",
-        "\n127.0.0.1 t.co #twitter-blocker",
-    ]
-
     # You need one QApplication instance per application.
     # Passing sys.argv allows command line args for the application.
     # If no command line, use QApplication([])
@@ -278,7 +314,18 @@ if __name__ == "__main__":
     window.show() # enables window visibility
 
     # Starts the QApplication event loop!
-    app.exec()
+    if (is_admin()):
+        app.exec()
+    else:
+        ctypes.windll.shell32.ShellExecuteW(
+            None,                       # parent window handle
+            "runas",                    # lpOperation ("runas" requests elevation)
+            sys.executable,             # lpFile (app to run, python interp)
+            " ".join([f'"{arg}"' for arg in sys.argv]), #arguments/params
+            None,                       # lpDirectory (none is current)
+            1                           # nshowcmd: 1 menas showNormal (window)
+        )
+    
 
     # this code beyond exec does not get executed until when the application end event is called.
     # run_block(300, block_string, filepath)
