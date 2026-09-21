@@ -35,6 +35,23 @@ def is_admin():
         return False
     
 
+def getTime(duration):
+    hours = duration // 3600
+    minutes = (duration % 3600) // 60
+
+    minuteStr = ""
+    if (minutes < 10):
+        minuteStr=f"0{minutes}"
+    else: minuteStr =f"{minutes}"
+
+    hourStr = ""
+    if (hours < 10):
+        hourStr=f"0{hours}"
+    else: hourStr =f"{hours}"
+
+    return [f'{hourStr}',f'{minuteStr}']
+
+
 def block(filepath, block_string):
     print(f'blocking discord in filepath: {filepath}')
     with open(filepath, "a") as file:
@@ -56,58 +73,58 @@ def unblock(filepath):
         file.writelines(kept)
         
 
-def run_block(duration_temp, block_string, filepath):
-    if (is_admin()):
-        # print(block_string)
-        # print(filepath)
-        factor = -1
-        while (factor != 0 and factor != 1):
-            factor = int(input('Minutes (0) or Hours (1): '))
+# def run_block(duration_temp, block_string, filepath):
+#     if (is_admin()):
+#         # print(block_string)
+#         # print(filepath)
+#         factor = -1
+#         while (factor != 0 and factor != 1):
+#             factor = int(input('Minutes (0) or Hours (1): '))
             
-        factorStr = ''
-        if (factor == 0): factorStr = 'Minutes' 
-        elif (factor == 1): factorStr = 'Hours'
+#         factorStr = ''
+#         if (factor == 0): factorStr = 'Minutes' 
+#         elif (factor == 1): factorStr = 'Hours'
 
-        duration = int(input(f'Amount of time in {factorStr}: '))
-        print(f'Blocked time set to {duration} {factorStr}' )
+#         duration = int(input(f'Amount of time in {factorStr}: '))
+#         print(f'Blocked time set to {duration} {factorStr}' )
 
-        block(filepath, block_string)
+#         block(filepath, block_string)
 
-        flushdns()
+#         flushdns()
 
-        if (factor == 0):
-            # factors of 1 minute
-            total_seconds = 60 * duration
-            for i in range(total_seconds):
-                time.sleep(1)
-                percent = (i + 1) / total_seconds * 100
-                bar = '■' * int(percent // 2)
-                print(f'\r[{bar:<50}] {percent:.1f}%', end='')
+#         if (factor == 0):
+#             # factors of 1 minute
+#             total_seconds = 60 * duration
+#             for i in range(total_seconds):
+#                 time.sleep(1)
+#                 percent = (i + 1) / total_seconds * 100
+#                 bar = '■' * int(percent // 2)
+#                 print(f'\r[{bar:<50}] {percent:.1f}%', end='')
 
-        elif (factor == 1):
-            # factors of 60 minutes
-            total_seconds = 60 * 60 * duration
-            for i in range(total_seconds):
-                time.sleep(1)
-                percent = (i + 1) / total_seconds * 100
-                bar = '■' * int(percent // 2)
-                print(f'\r[{bar:<50}] {percent:.1f}%', end='')
-        else: 
-            print('Factor configured incorrectly')
+#         elif (factor == 1):
+#             # factors of 60 minutes
+#             total_seconds = 60 * 60 * duration
+#             for i in range(total_seconds):
+#                 time.sleep(1)
+#                 percent = (i + 1) / total_seconds * 100
+#                 bar = '■' * int(percent // 2)
+#                 print(f'\r[{bar:<50}] {percent:.1f}%', end='')
+#         else: 
+#             print('Factor configured incorrectly')
 
-        unblock(filepath)
+#         unblock(filepath)
 
-        flushdns()
+#         flushdns()
             
-    else:
-        ctypes.windll.shell32.ShellExecuteW(
-            None,                       # parent window handle
-            "runas",                    # lpOperation ("runas" requests elevation)
-            sys.executable,             # lpFile (app to run, python interp)
-            " ".join([f'"{arg}"' for arg in sys.argv]), #arguments/params
-            None,                       # lpDirectory (none is current)
-            1                           # nshowcmd: 1 menas showNormal (window)
-        )
+#     else:
+#         ctypes.windll.shell32.ShellExecuteW(
+#             None,                       # parent window handle
+#             "runas",                    # lpOperation ("runas" requests elevation)
+#             sys.executable,             # lpFile (app to run, python interp)
+#             " ".join([f'"{arg}"' for arg in sys.argv]), #arguments/params
+#             None,                       # lpDirectory (none is current)
+#             1                           # nshowcmd: 1 menas showNormal (window)
+#         )
 
 
 class MainWindow(QMainWindow, Ui_MainWindow):
@@ -117,6 +134,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # use compiled ui
         self.setupUi(self)
 
+
+        
         self.duration = 0
         self.end_time = 0
         self.progressBar.setValue(0)
@@ -141,7 +160,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 "\n127.0.0.1 discord.co #discord-blocker" +
                 "\n127.0.0.1 dis.gd #discord-blocker",
             'telegram': 
-                "\n127.0.0.1 web.telegram.org #telegram-blocker",
+                "\n127.0.0.1 telegram.org" +
+                "\n127.0.0.1 www.telegram.org" +
+                "\n127.0.0.1 web.telegram.org" +
+                "\n127.0.0.1 desktop.telegram.org" +
+                "\n127.0.0.1 t.me" +
+                "\n127.0.0.1 telegram.me",
             'youtube': 
                 "\n127.0.0.1 youtube.com #youtube-blocker" +
                 "\n127.0.0.1 www.youtube.com #youtube-blocker",}
@@ -152,12 +176,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             'telegram': False,
             'youtube': False,
         }
-        # self.filepath = r"C:\Windows\System32\drivers\etc\hosts"
-        self.filepath = r"C:\Users\hawes_gihs\Desktop\Local Programming\DiscordBlocker\hosts"
+        self.filepath = r"C:\Windows\System32\drivers\etc\hosts"
+        #self.filepath = r"C:\Users\hawes_gihs\Desktop\Local Programming\DiscordBlocker\hosts"
 
         self.setWindowTitle("Application Blocker")
-        self.setMinimumSize(465,410)
-        self.setMaximumSize(465,410)
+        self.setMinimumSize(500,530)
+        self.setMaximumSize(500,530)
 
         self.startButton.setDisabled(True)
         self.startButton.clicked.connect(self.begin_blocking_clicked)
@@ -174,7 +198,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.telegramCheck.checkStateChanged.connect(self.telegram_toggled)
         self.youtubeCheck.checkStateChanged.connect(self.youtube_toggled)
 
-        self.progressFrame.setHidden(True)
+        self.progressGroup.setHidden(True)
 
     def build_string(self):
         block_string = ""
@@ -213,16 +237,23 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         percent = min(100, (1 - remaining / self.duration) * 100)
         self.progressBar.setValue(int(percent))
 
+        timeArr = getTime(remaining)
+
+        self.progressLabel.setText(f"Blocking Progress: {timeArr[0][:-2]}:{timeArr[1][:-2]} remaining")
+
+
+
         if (remaining <= 0):
             self.end_blocking()
 
     def begin_blocking_clicked(self):
         self.block_string = self.build_string()
+        self.startButton.setDisabled(True)
         #print(self.block_string)
 
         print(f"Begin Blocking...")
 
-        self.progressFrame.setHidden(False)
+        self.progressGroup.setHidden(False)
         self.cancelButton.setDisabled(False)
 
         print(f'Blocked time set to {self.duration} seconds' )
@@ -236,7 +267,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         unblock(self.filepath)
         flushdns()
         self.cancelButton.setDisabled(True)
-        self.progressFrame.setHidden(True) 
+        self.startButton.setDisabled(False)
+        self.progressGroup.setHidden(True) 
 
 
     def duration_edit_changed(self):
@@ -273,20 +305,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         print(f"the duration is: {self.duration} seconds")
 
-        hours = self.duration // 3600
-        minutes = (self.duration % 3600) // 60
+        timeArr = getTime(self.duration)
 
-        minuteStr = ""
-        if (minutes < 10):
-            minuteStr=f"0{minutes}"
-        else: minuteStr =f"{minutes}"
-
-        hourStr = ""
-        if (hours < 10):
-            hourStr=f"0{hours}"
-        else: hourStr =f"{hours}"
-
-        self.selectedDurationLabel.setText(f"Blocking for a duration of: {hours}:{minutes}")
+        self.selectedDurationLabel.setText(f"Blocking for a duration of: {timeArr[0]}:{timeArr[1]}")
 
     def closeEvent(self, event: QCloseEvent):
         print("closing program")
@@ -313,9 +334,13 @@ if __name__ == "__main__":
     window = MainWindow()
     window.show() # enables window visibility
 
+    with open("discordblocker.qss", "r") as f:
+        style = f.read()
+        app.setStyleSheet(style)
+
     # Starts the QApplication event loop!
     if (is_admin()):
-        app.exec()
+        sys.exit(app.exec())
     else:
         ctypes.windll.shell32.ShellExecuteW(
             None,                       # parent window handle

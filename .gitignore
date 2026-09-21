@@ -1,1 +1,4 @@
 hosts
+dark-theme.qss
+.gitignore
+block_mainwindow.ui

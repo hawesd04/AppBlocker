@@ -1,0 +1,95 @@
+QWidget {
+    color:white;
+    font-family: "Segoe UI", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+}
+
+QMainWindow {
+    background-color: #1d1f29;
+}
+QMainWindow::separator {
+    background: yellow;
+    width: 10px; /* when vertical */
+    height: 10px; /* when horizontal */
+}
+
+QLabel#blockAppLabel {
+    color: qlineargradient(x1:0, y1:0, x2:50, y2:50,
+                                stop:0 #ffcc00, stop:1 #ff9d1c);
+    font-weight: bold;
+}
+
+QPushButton {
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #09ffffff;
+    border: 1px solid #16ffffff;
+    color: white;
+}
+
+QPushButton:disabled {
+    color:gray;
+}
+
+QPushButton:hover {
+    background-color: #18ffffff;
+    border: 1px solid #36ffffff;
+}
+
+QProgressBar {
+    border-radius: 5px;
+    background-color: #09ffffff;
+    border: 1px solid #16ffffff;
+
+    text-align: center;
+}
+
+QProgressBar::chunk {
+    border-radius: 5px;
+    background-color: #b15901;
+    width: 20px;
+    margin: 0.5px;
+}
+
+QTimeEdit {
+    padding:5px;
+    background-color: #1d1f29;
+
+    border-radius:5px;
+    border: 1px solid #16ffffff;
+}
+
+QTimeEdit QAbstractItemView {
+    color: white;
+    background-color: #1d1f29;
+}
+
+QCheckBox {
+    padding: 5px;
+    color:white;
+    spacing: 5px;
+    border-radius: 5px;
+}
+QCheckBox::indicator {
+    border: 1px solid #16ffffff;
+    color:white;
+    width: 15px;
+    height: 15px;
+
+    border-radius: 5px;
+}
+QCheckBox::indicator::unchecked {
+    background-color: #1d1f29;
+}
+QCheckBox::indicator::checked {
+    background-color: #ff9d1c;
+    border: 1px solid #ffffffff;
+    color: white;
+    image: url(./assets/sample.svg);
+}
+
+QGroupBox {
+    border-radius: 16px;
+    border: 1px solid #16ffffff;
+    background-color: #09ffffff;
+}

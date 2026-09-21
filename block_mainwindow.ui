@@ -6,157 +6,135 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>595</width>
-    <height>484</height>
+    <width>508</width>
+    <height>561</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget {
+    color:white;
+    font-family: &quot;Segoe UI&quot;, &quot;SF Pro Display&quot;, &quot;Helvetica Neue&quot;, Arial, sans-serif;
+    font-size: 14px;
+}
+
+QMainWindow {
+    background-color: #1d1f29;
+}
+QMainWindow::separator {
+    background: yellow;
+    width: 10px; /* when vertical */
+    height: 10px; /* when horizontal */
+}
+
+QLabel#blockAppLabel {
+    color: qlineargradient(x1:0, y1:0, x2:50, y2:50,
+                                stop:0 #ffcc00, stop:1 #ff9d1c);
+    font-weight: bold;
+}
+
+QPushButton {
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #09ffffff;
+    border: 1px solid #16ffffff;
+    color: white;
+}
+
+QPushButton:disabled {
+    color:gray;
+}
+
+QPushButton:hover {
+    background-color: #18ffffff;
+    border: 1px solid #36ffffff;
+}
+
+QProgressBar {
+    border-radius: 5px;
+    background-color: #09ffffff;
+    border: 1px solid #16ffffff;
+
+    text-align: center;
+}
+
+QProgressBar::chunk {
+    border-radius: 5px;
+    background-color: #b15901;
+    width: 20px;
+    margin: 0.5px;
+}
+
+QTimeEdit {
+    padding:5px;
+    background-color: #1d1f29;
+
+    border-radius:5px;
+    border: 1px solid #16ffffff;
+}
+
+QTimeEdit QAbstractItemView {
+    color: white;
+    background-color: #1d1f29;
+}
+
+QCheckBox {
+    padding: 5px;
+    color:white;
+    spacing: 5px;
+    border-radius: 5px;
+}
+QCheckBox::indicator {
+    border: 1px solid #16ffffff;
+    color:white;
+    width: 15px;
+    height: 15px;
+
+    border-radius: 5px;
+}
+QCheckBox::indicator::unchecked {
+    background-color: #1d1f29;
+}
+QCheckBox::indicator::checked {
+    background-color: #ff9d1c;
+    border: 1px solid #ffffffff;
+    color: white;
+    image: url(./assets/sample.svg);
+}
+
+QGroupBox {
+    border-radius: 16px;
+    border: 1px solid #16ffffff;
+    background-color: #09ffffff;
+}</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>230</y>
-      <width>441</width>
-      <height>26</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Orientation::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer_5">
-       <property name="orientation">
-        <enum>Qt::Orientation::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="startButton">
-       <property name="text">
-        <string>Begin Blocking</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Orientation::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="cancelButton">
-       <property name="text">
-        <string>Cancel Blocking</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer_3">
-       <property name="orientation">
-        <enum>Qt::Orientation::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer_4">
-       <property name="orientation">
-        <enum>Qt::Orientation::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QFrame" name="app_select_frame">
+   <widget class="QGroupBox" name="groupBox">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>441</width>
-      <height>91</height>
+      <width>481</width>
+      <height>321</height>
      </rect>
     </property>
-    <property name="minimumSize">
-     <size>
-      <width>441</width>
-      <height>91</height>
-     </size>
+    <property name="title">
+     <string/>
     </property>
-    <property name="maximumSize">
-     <size>
-      <width>16777215</width>
-      <height>91</height>
-     </size>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::Shape::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Shadow::Raised</enum>
-    </property>
-    <widget class="QLabel" name="blockAppLabel">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>10</y>
-       <width>161</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Choose Apps to Block</string>
-     </property>
-    </widget>
     <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
-       <x>0</x>
-       <y>40</y>
+       <x>20</x>
+       <y>230</y>
        <width>441</width>
-       <height>41</height>
+       <height>71</height>
       </rect>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <spacer name="horizontalSpacer_14">
+       <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Orientation::Horizontal</enum>
         </property>
@@ -169,35 +147,60 @@
        </spacer>
       </item>
       <item>
-       <widget class="QCheckBox" name="discordCheck">
+       <spacer name="horizontalSpacer_5">
+        <property name="orientation">
+         <enum>Qt::Orientation::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="startButton">
         <property name="text">
-         <string>Discord</string>
+         <string>Begin Blocking</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="twitterCheck">
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Orientation::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="cancelButton">
         <property name="text">
-         <string>Twitter</string>
+         <string>Cancel Blocking</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="youtubeCheck">
-        <property name="text">
-         <string>YouTube</string>
+       <spacer name="horizontalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Orientation::Horizontal</enum>
         </property>
-       </widget>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
       </item>
       <item>
-       <widget class="QCheckBox" name="telegramCheck">
-        <property name="text">
-         <string>Telegram</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer_15">
+       <spacer name="horizontalSpacer_4">
         <property name="orientation">
          <enum>Qt::Orientation::Horizontal</enum>
         </property>
@@ -211,72 +214,168 @@
       </item>
      </layout>
     </widget>
-   </widget>
-   <widget class="QFrame" name="progressFrame">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>280</y>
-      <width>441</width>
-      <height>111</height>
-     </rect>
-    </property>
-    <property name="minimumSize">
-     <size>
-      <width>441</width>
-      <height>111</height>
-     </size>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::Shape::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Shadow::Raised</enum>
-    </property>
-    <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0">
-      <layout class="QHBoxLayout" name="horizontalLayout_4">
+    <widget class="QFrame" name="time_select_frame">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>115</y>
+       <width>441</width>
+       <height>111</height>
+      </rect>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>441</width>
+       <height>101</height>
+      </size>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Shape::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Shadow::Raised</enum>
+     </property>
+     <widget class="QWidget" name="layoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>441</width>
+        <height>71</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <spacer name="horizontalSpacer_6">
-         <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer_7">
-         <property name="orientation">
-          <enum>Qt::Orientation::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QLabel" name="progressLabel">
+        <widget class="QFrame" name="LeftTimeFrame">
          <property name="minimumSize">
           <size>
-           <width>184</width>
+           <width>217</width>
+           <height>69</height>
+          </size>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::Shape::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Shadow::Raised</enum>
+         </property>
+         <widget class="QLabel" name="label">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>0</y>
+            <width>201</width>
+            <height>31</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Set Duration (hh:mm)</string>
+          </property>
+         </widget>
+         <widget class="QTimeEdit" name="durationEdit">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>30</y>
+            <width>191</width>
+            <height>31</height>
+           </rect>
+          </property>
+          <property name="displayFormat">
+           <string>hh:mm</string>
+          </property>
+         </widget>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="RightTimeFrame">
+         <property name="minimumSize">
+          <size>
+           <width>216</width>
+           <height>69</height>
+          </size>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::Shape::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Shadow::Raised</enum>
+         </property>
+         <widget class="QLabel" name="set_endtime_label">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>0</y>
+            <width>191</width>
+            <height>31</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Set End Time</string>
+          </property>
+         </widget>
+         <widget class="QTimeEdit" name="endTimeEdit">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>30</y>
+            <width>191</width>
+            <height>31</height>
+           </rect>
+          </property>
+          <property name="displayFormat">
+           <string>hh:mm AP</string>
+          </property>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="layoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>80</y>
+        <width>441</width>
+        <height>22</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_6">
+       <item>
+        <spacer name="horizontalSpacer_17">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
            <height>20</height>
           </size>
          </property>
+        </spacer>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_16">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="selectedDurationLabel">
          <property name="text">
-          <string>Blocking Progress: 00:00 remaining</string>
+          <string>Blocking for a duration of: 00:00</string>
          </property>
         </widget>
        </item>
        <item>
-        <spacer name="horizontalSpacer_8">
+        <spacer name="horizontalSpacer_18">
          <property name="orientation">
           <enum>Qt::Orientation::Horizontal</enum>
          </property>
@@ -289,7 +388,7 @@
         </spacer>
        </item>
        <item>
-        <spacer name="horizontalSpacer_9">
+        <spacer name="horizontalSpacer_19">
          <property name="orientation">
           <enum>Qt::Orientation::Horizontal</enum>
          </property>
@@ -302,201 +401,225 @@
         </spacer>
        </item>
       </layout>
-     </item>
-     <item row="1" column="0">
-      <widget class="QProgressBar" name="progressBar">
-       <property name="value">
-        <number>24</number>
-       </property>
-      </widget>
-     </item>
-    </layout>
+     </widget>
+    </widget>
+    <widget class="QFrame" name="appSelectFrame">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>15</y>
+       <width>441</width>
+       <height>91</height>
+      </rect>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>441</width>
+       <height>91</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>91</height>
+      </size>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Shape::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Shadow::Raised</enum>
+     </property>
+     <widget class="QLabel" name="blockAppLabel">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>161</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Choose Apps to Block</string>
+      </property>
+     </widget>
+     <widget class="QWidget" name="layoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>40</y>
+        <width>441</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <spacer name="horizontalSpacer_14">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="discordCheck">
+         <property name="text">
+          <string>Discord</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="twitterCheck">
+         <property name="text">
+          <string>Twitter</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="youtubeCheck">
+         <property name="text">
+          <string>YouTube</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="telegramCheck">
+         <property name="text">
+          <string>Telegram</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_15">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </widget>
    </widget>
-   <widget class="QFrame" name="time_select_frame">
+   <widget class="QGroupBox" name="progressGroup">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>110</y>
-      <width>441</width>
-      <height>111</height>
+      <y>350</y>
+      <width>481</width>
+      <height>151</height>
      </rect>
     </property>
-    <property name="minimumSize">
-     <size>
-      <width>441</width>
-      <height>101</height>
-     </size>
+    <property name="title">
+     <string/>
     </property>
-    <property name="frameShape">
-     <enum>QFrame::Shape::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Shadow::Raised</enum>
-    </property>
-    <widget class="QWidget" name="layoutWidget">
+    <widget class="QFrame" name="progressFrame">
      <property name="geometry">
       <rect>
-       <x>0</x>
-       <y>0</y>
+       <x>20</x>
+       <y>20</y>
        <width>441</width>
-       <height>71</height>
+       <height>111</height>
       </rect>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
-      <item>
-       <widget class="QFrame" name="LeftTimeFrame">
-        <property name="minimumSize">
-         <size>
-          <width>217</width>
-          <height>69</height>
-         </size>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::Shape::StyledPanel</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Shadow::Raised</enum>
-        </property>
-        <widget class="QLabel" name="label">
-         <property name="geometry">
-          <rect>
-           <x>20</x>
-           <y>0</y>
-           <width>201</width>
-           <height>31</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Set Duration (hh:mm)</string>
-         </property>
-        </widget>
-        <widget class="QTimeEdit" name="durationEdit">
-         <property name="geometry">
-          <rect>
-           <x>20</x>
-           <y>30</y>
-           <width>191</width>
-           <height>31</height>
-          </rect>
-         </property>
-         <property name="displayFormat">
-          <string>hh:mm</string>
-         </property>
-        </widget>
-       </widget>
-      </item>
-      <item>
-       <widget class="QFrame" name="RightTimeFrame">
-        <property name="minimumSize">
-         <size>
-          <width>216</width>
-          <height>69</height>
-         </size>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::Shape::StyledPanel</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Shadow::Raised</enum>
-        </property>
-        <widget class="QLabel" name="set_endtime_label">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>0</y>
-           <width>191</width>
-           <height>31</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Set End Time</string>
-         </property>
-        </widget>
-        <widget class="QTimeEdit" name="endTimeEdit">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>30</y>
-           <width>191</width>
-           <height>31</height>
-          </rect>
-         </property>
-         <property name="displayFormat">
-          <string>hh:mm AP</string>
-         </property>
-        </widget>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-    <widget class="QWidget" name="layoutWidget">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>80</y>
+     <property name="minimumSize">
+      <size>
        <width>441</width>
-       <height>22</height>
-      </rect>
+       <height>111</height>
+      </size>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_6">
-      <item>
-       <spacer name="horizontalSpacer_17">
-        <property name="orientation">
-         <enum>Qt::Orientation::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
+     <property name="frameShape">
+      <enum>QFrame::Shape::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Shadow::Raised</enum>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <spacer name="horizontalSpacer_6">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_7">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QLabel" name="progressLabel">
+          <property name="minimumSize">
+           <size>
+            <width>184</width>
+            <height>20</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Blocking Progress: 00:00 remaining</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_8">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_9">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
       </item>
-      <item>
-       <spacer name="horizontalSpacer_16">
-        <property name="orientation">
-         <enum>Qt::Orientation::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QLabel" name="selectedDurationLabel">
-        <property name="text">
-         <string>Blocking for a duration of: 00:00</string>
+      <item row="1" column="0">
+       <widget class="QProgressBar" name="progressBar">
+        <property name="value">
+         <number>100</number>
         </property>
        </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer_18">
-        <property name="orientation">
-         <enum>Qt::Orientation::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer_19">
-        <property name="orientation">
-         <enum>Qt::Orientation::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
       </item>
      </layout>
     </widget>
@@ -507,8 +630,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>595</width>
-     <height>21</height>
+     <width>508</width>
+     <height>24</height>
     </rect>
    </property>
   </widget>

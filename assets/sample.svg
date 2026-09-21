@@ -1,0 +1,15 @@
+<!--
+Source - https://stackoverflow.com/a/79985963
+Posted by Ahmad Ismail, modified by community. See post 'Timeline' for change history
+Retrieved 2026-09-20, License - CC BY-SA 4.0
+-->
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+  <path d="M3.5 8.5 L6.5 11.5 L12.5 4.5"
+        fill="none"
+        stroke="#080808"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+</svg>
+
