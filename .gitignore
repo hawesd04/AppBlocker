@@ -2,3 +2,6 @@ hosts
 dark-theme.qss
 .gitignore
 block_mainwindow.ui
+
+/dist
+/build

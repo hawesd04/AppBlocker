@@ -13,10 +13,20 @@ QMainWindow::separator {
     height: 10px; /* when horizontal */
 }
 
-QLabel#blockAppLabel {
-    color: qlineargradient(x1:0, y1:0, x2:50, y2:50,
-                                stop:0 #ffcc00, stop:1 #ff9d1c);
+QLabel#blockAppLabel, QLabel#hostLabel, QLabel#setDurLabel, QLabel#setEndLabel {
+    color: white;
     font-weight: bold;
+}
+
+QLabel#hostFileDirectoryLabel {
+    color: gray;
+    font-style: italic;
+
+    background-color: #1d1f29;
+    border-radius: 5px;
+
+
+    padding:5px;
 }
 
 QPushButton {
@@ -46,7 +56,7 @@ QProgressBar {
 
 QProgressBar::chunk {
     border-radius: 5px;
-    background-color: #b15901;
+    background-color: #f56006;
     width: 20px;
     margin: 0.5px;
 }
@@ -92,4 +102,8 @@ QGroupBox {
     border-radius: 16px;
     border: 1px solid #16ffffff;
     background-color: #09ffffff;
+}
+
+QGroupBox#checkGroup {
+    background-color: #1d1f29;
 }

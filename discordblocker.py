@@ -1,14 +1,25 @@
-import subprocess
-import ctypes
-import os
-import sys
-import time
+import subprocess, ctypes, os, sys, platform, time
 from datetime import datetime
 
-from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QFrame, QTimeEdit, QProgressBar
-from PySide6.QtCore import QSize, Qt, QDateTime, QTimer
-from PySide6.QtGui import QCloseEvent
+from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QFrame, QTimeEdit, QProgressBar, QFileDialog
+from PySide6.QtCore import QDateTime, QTimer
+from PySide6.QtGui import QCloseEvent, QIcon
 from block_mainwindow_ui import Ui_MainWindow
+
+def default_hosts_path() -> str:
+    system = platform.system()
+    if (system == "Windows"):
+        return r"C:\Windows\System32\drivers\etc"
+    else: # mac / linux
+        return "/etc"
+
+def pick_hosts_file(parent=None) -> str | None:
+    path, _ = QFileDialog.getOpenFileName(parent,"Select hosts file",default_hosts_path(),"All Files (*)")
+    return path or None
+
+def resource_path(rel):
+    base = getattr(sys, "_MEIPASS", os.path.dirname(os.path.abspath(__file__)))
+    return os.path.join(base, rel)
 
 def flushdns():
     try:
@@ -28,10 +39,8 @@ def flushdns():
 
 def is_admin():
     try:
-        print("trying to determine admin status\n")
         return ctypes.windll.shell32.IsUserAnAdmin()
     except:
-        print("user is not an admin\n")
         return False
     
 
@@ -58,7 +67,7 @@ def block(filepath, block_string):
         file.writelines(block_string);
 
 def unblock(filepath):
-    BLOCK_TAGS = ("#discord-blocker", "#telegram-blocker", "#twitter-blocker", "#youtube-blocker")
+    BLOCK_TAGS = ("#discord-blocker", "#instagram-blocker", "#twitter-blocker", "#youtube-blocker", "facebook-blocker", "tiktok-blocker", "bsky-blocker")
     with open(filepath, "r") as file:
         lines = file.readlines()
 
@@ -73,60 +82,6 @@ def unblock(filepath):
         file.writelines(kept)
         
 
-# def run_block(duration_temp, block_string, filepath):
-#     if (is_admin()):
-#         # print(block_string)
-#         # print(filepath)
-#         factor = -1
-#         while (factor != 0 and factor != 1):
-#             factor = int(input('Minutes (0) or Hours (1): '))
-            
-#         factorStr = ''
-#         if (factor == 0): factorStr = 'Minutes' 
-#         elif (factor == 1): factorStr = 'Hours'
-
-#         duration = int(input(f'Amount of time in {factorStr}: '))
-#         print(f'Blocked time set to {duration} {factorStr}' )
-
-#         block(filepath, block_string)
-
-#         flushdns()
-
-#         if (factor == 0):
-#             # factors of 1 minute
-#             total_seconds = 60 * duration
-#             for i in range(total_seconds):
-#                 time.sleep(1)
-#                 percent = (i + 1) / total_seconds * 100
-#                 bar = '■' * int(percent // 2)
-#                 print(f'\r[{bar:<50}] {percent:.1f}%', end='')
-
-#         elif (factor == 1):
-#             # factors of 60 minutes
-#             total_seconds = 60 * 60 * duration
-#             for i in range(total_seconds):
-#                 time.sleep(1)
-#                 percent = (i + 1) / total_seconds * 100
-#                 bar = '■' * int(percent // 2)
-#                 print(f'\r[{bar:<50}] {percent:.1f}%', end='')
-#         else: 
-#             print('Factor configured incorrectly')
-
-#         unblock(filepath)
-
-#         flushdns()
-            
-#     else:
-#         ctypes.windll.shell32.ShellExecuteW(
-#             None,                       # parent window handle
-#             "runas",                    # lpOperation ("runas" requests elevation)
-#             sys.executable,             # lpFile (app to run, python interp)
-#             " ".join([f'"{arg}"' for arg in sys.argv]), #arguments/params
-#             None,                       # lpDirectory (none is current)
-#             1                           # nshowcmd: 1 menas showNormal (window)
-#         )
-
-
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
@@ -134,8 +89,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # use compiled ui
         self.setupUi(self)
 
-
-        
         self.duration = 0
         self.end_time = 0
         self.progressBar.setValue(0)
@@ -159,46 +112,87 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 "\n127.0.0.1 discordapp.com #discord-blocker" +
                 "\n127.0.0.1 discord.co #discord-blocker" +
                 "\n127.0.0.1 dis.gd #discord-blocker",
-            'telegram': 
-                "\n127.0.0.1 telegram.org" +
-                "\n127.0.0.1 www.telegram.org" +
-                "\n127.0.0.1 web.telegram.org" +
-                "\n127.0.0.1 desktop.telegram.org" +
-                "\n127.0.0.1 t.me" +
-                "\n127.0.0.1 telegram.me",
-            'youtube': 
+            'instagram': 
+                "\n127.0.0.1 www.instagram.com #instagram-blocker" + 
+                "\n127.0.0.1 instagram.com #instagram-blocker",
+            'tiktok':
+                "\n127.0.0.1 tiktok.com #tiktok-blocker" +
+                "\n127.0.0.1 www.tiktok.com #tiktok-blocker",
+            'bsky':
+                "\n127.0.0.1 bsky.app #bsky-blocker",
+            'facebook':
+                "\n127.0.0.1 facebook.com #facebook-blocker" +
+                "\n127.0.0.1 www.facebook.com #facebook-blocker",
+            'youtube':
                 "\n127.0.0.1 youtube.com #youtube-blocker" +
                 "\n127.0.0.1 www.youtube.com #youtube-blocker",}
         
         self.blockStatus = {
             'twitter': False,
             'discord': False,
-            'telegram': False,
+            'instagram': False,
             'youtube': False,
+            'facebook': False,
+            'bsky': False,
+            'tiktok': False
         }
-        self.filepath = r"C:\Windows\System32\drivers\etc\hosts"
-        #self.filepath = r"C:\Users\hawes_gihs\Desktop\Local Programming\DiscordBlocker\hosts"
+        self.filepath = default_hosts_path() + r"\hosts"
+        self.hostFileDirectoryLabel.setText(self.filepath)
 
-        self.setWindowTitle("Application Blocker")
-        self.setMinimumSize(500,530)
-        self.setMaximumSize(500,530)
+        self.setWindowTitle("App Blocker")
+        self.setFixedHeight(490)
 
         self.startButton.setDisabled(True)
         self.startButton.clicked.connect(self.begin_blocking_clicked)
 
         self.cancelButton.setDisabled(True)
         self.cancelButton.clicked.connect(self.cancel_blocking_clicked)
+
+        self.folderButton.clicked.connect(self.folder_clicked)
         
         self.durationEdit.timeChanged.connect(self.duration_edit_changed)
         self.endTimeEdit.timeChanged.connect(self.end_time_edit_changed)
 
-
         self.discordCheck.checkStateChanged.connect(self.discord_toggled)
         self.twitterCheck.checkStateChanged.connect(self.twitter_toggled)
-        self.telegramCheck.checkStateChanged.connect(self.telegram_toggled)
+        self.instagramCheck.checkStateChanged.connect(self.instagram_toggled)
         self.youtubeCheck.checkStateChanged.connect(self.youtube_toggled)
+        self.tiktokCheck.checkStateChanged.connect(self.tiktok_toggled)
+        self.facebookCheck.checkStateChanged.connect(self.facebook_toggled)
+        self.bskyCheck.checkStateChanged.connect(self.bsky_toggled)
 
+        self.midLine.setFrameShape(QFrame.NoFrame)
+        self.midLine.setFixedHeight(2)
+        self.midLine.setStyleSheet("background-color: #16ffffff; border: none; margin: 0; padding: 0;")
+        
         self.progressGroup.setHidden(True)
+
+        self.validPathIcon.setHidden(True)
+        self.folderButton.setIcon(QIcon(resource_path("assets/folder_white.svg")))
+        if (self.filepath):
+            if (os.path.isfile(self.filepath) and self.filepath[-5:] == "hosts"):
+                self.hostFileDirectoryLabel.setStyleSheet("color: lime;")
+                self.validPathIcon.setHidden(False)
+
+    def folder_clicked(self):
+        path = pick_hosts_file(self)
+        self.validPathIcon.setHidden(True)
+        self.hostFileDirectoryLabel.setStyleSheet("color: gray;")
+        if path:
+            if(os.path.isfile(path)):
+                self.filepath = path
+                self.hostFileDirectoryLabel.setText(path)
+
+                if (self.filepath[-5:] == "hosts"):
+                    self.hostFileDirectoryLabel.setStyleSheet("color: lime;")
+                    self.validPathIcon.setHidden(False)
+                    if (self.duration > 0):
+                        self.startButton.setDisabled(False)
+
+        if (self.validPathIcon.isHidden()):
+            self.startButton.setDisabled(True)
+
+                    
 
     def build_string(self):
         block_string = ""
@@ -219,13 +213,27 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         print("twitter toggled")
         self.blockStatus["twitter"] = self.twitterCheck.isChecked()
 
-    def telegram_toggled(self):
-        print("telegram toggled")
-        self.blockStatus["telegram"] = self.telegramCheck.isChecked()
+    def instagram_toggled(self):
+        print("instagram toggled")
+        self.blockStatus["instagram"] = self.instagramCheck.isChecked()
 
     def youtube_toggled(self):
         print("youtube toggled")
         self.blockStatus["youtube"] = self.youtubeCheck.isChecked()
+
+    def tiktok_toggled(self):
+        print("tiktok toggled")
+        self.blockStatus["tiktok"] = self.tiktokCheck.isChecked()
+
+    def facebook_toggled(self):
+        print("facebook toggled")
+        self.blockStatus["facebook"] = self.facebookCheck.isChecked()
+
+    def bsky_toggled(self):
+        print("bluesky toggled")
+        self.blockStatus["bsky"] = self.bskyCheck.isChecked()
+
+    
 
     # ---------------------------------------------------------------------------------
 
@@ -254,6 +262,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         print(f"Begin Blocking...")
 
         self.progressGroup.setHidden(False)
+        self.setMaximumHeight(590)
+        self.setFixedHeight(590)
         self.cancelButton.setDisabled(False)
 
         print(f'Blocked time set to {self.duration} seconds' )
@@ -268,8 +278,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         flushdns()
         self.cancelButton.setDisabled(True)
         self.startButton.setDisabled(False)
+        self.setFixedHeight(490)
+        self.setMaximumHeight(490)
         self.progressGroup.setHidden(True) 
-
 
     def duration_edit_changed(self):
         durEditObj = self.durationEdit.time()
@@ -281,7 +292,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.duration = (hours * 3600) + (minutes * 60)
         self.selectedDurationLabel.setText(f"Blocking for a duration of: {durationStr[:-3]}")
 
-        if (self.duration > 0):
+        if (self.duration > 0 and not (self.validPathIcon.isHidden())):
             self.startButton.setDisabled(False)
 
     def seconds_until(self, qtime):
@@ -300,7 +311,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         print(datetime.now().time())
         self.duration = self.seconds_until(self.endTimeEdit.time())
 
-        if (self.duration > 0):
+        if (self.duration > 0 and not (self.validPathIcon.isHidden())):
             self.startButton.setDisabled(False)
 
         print(f"the duration is: {self.duration} seconds")
@@ -328,15 +339,22 @@ if __name__ == "__main__":
     # You need one QApplication instance per application.
     # Passing sys.argv allows command line args for the application.
     # If no command line, use QApplication([])
+
+    # resolve qss path to allow access to items in ./assets that are not accessible from build directory
+    os.chdir(resource_path("."))
+
     app = QApplication(sys.argv)
+    app.setWindowIcon(QIcon(resource_path("assets/db.ico")))
 
     # Create a Qt widget (window)
     window = MainWindow()
     window.show() # enables window visibility
 
-    with open("discordblocker.qss", "r") as f:
+    with open(resource_path("discordblocker.qss"), encoding="utf-8") as f:
         style = f.read()
         app.setStyleSheet(style)
+
+
 
     # Starts the QApplication event loop!
     if (is_admin()):
