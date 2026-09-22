@@ -5,3 +5,5 @@ block_mainwindow.ui
 
 /dist
 /build
+
+run_blocker.sh

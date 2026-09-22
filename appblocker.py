@@ -1,7 +1,7 @@
 import subprocess, ctypes, os, sys, platform, time
 from datetime import datetime
 
-from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QLabel, QFrame, QTimeEdit, QProgressBar, QFileDialog
+from PySide6.QtWidgets import QApplication, QMainWindow, QFrame, QFileDialog
 from PySide6.QtCore import QDateTime, QTimer
 from PySide6.QtGui import QCloseEvent, QIcon
 from block_mainwindow_ui import Ui_MainWindow
@@ -350,7 +350,7 @@ if __name__ == "__main__":
     window = MainWindow()
     window.show() # enables window visibility
 
-    with open(resource_path("discordblocker.qss"), encoding="utf-8") as f:
+    with open(resource_path("appblocker.qss"), encoding="utf-8") as f:
         style = f.read()
         app.setStyleSheet(style)
 
