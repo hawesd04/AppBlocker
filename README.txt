@@ -38,6 +38,12 @@ What you need to know:
     - Nothing is done beyond that with the elevated permissions. In
       all actuality, this is a very simple piece of software.
 
+* Why isn't it working?
+    - This is likely a fault of your browser using something called "Secure DNS".
+      if the program is failing to block addresses, ensure that in Privacy & Safety
+      in whatever browser you are using, "Use secure DNS" is disabled as it will
+      override any changes made to the hosts file.
+
 ------------------------------------------------------------------------
 
 Installation instructions:

@@ -2,10 +2,10 @@
 
 
 a = Analysis(
-    ['discordblocker.py'],
+    ['appblocker.py'],
     pathex=[],
     binaries=[],
-    datas=[('discordblocker.qss', '.'), ('assets', 'assets')],
+    datas=[('appblocker.qss', '.'), ('assets', 'assets')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

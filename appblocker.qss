@@ -9,13 +9,18 @@ QMainWindow {
 }
 QMainWindow::separator {
     background: yellow;
-    width: 10px; /* when vertical */
-    height: 10px; /* when horizontal */
+    width: 10px;
+    height: 10px;
 }
 
 QLabel#blockAppLabel, QLabel#hostLabel, QLabel#setDurLabel, QLabel#setEndLabel {
     color: white;
     font-weight: bold;
+}
+
+QFrame {
+    background-color: transparent;
+    border: none;
 }
 
 QLabel#hostFileDirectoryLabel {

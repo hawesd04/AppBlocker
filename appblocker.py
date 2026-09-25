@@ -6,21 +6,65 @@ from PySide6.QtCore import QDateTime, QTimer
 from PySide6.QtGui import QCloseEvent, QIcon
 from block_mainwindow_ui import Ui_MainWindow
 
+"""
+    Gets the default host file path depending on whether the user's
+    operating system is Windows or MacOS / Linux
+    
+    Returns
+    ---------------
+    String
+        a defualt path to the hosts file depending on the users os
+"""
 def default_hosts_path() -> str:
     system = platform.system()
     if (system == "Windows"):
         return r"C:\Windows\System32\drivers\etc"
     else: # mac / linux
         return "/etc"
+"""
+    Allows the user to select a file on their pc to choose as their targeted
+    hosts file
 
+    Paramaters
+    ---------------
+    parent : String
+        the parent ui window being targeted in the selection
+    None : None
+        If no parent ui exists, return none.
+    
+    Returns
+    ---------------
+    String
+        the string representing the file path of the selected hosts file
+    None
+        Null in the case that there is no file selected
+"""
 def pick_hosts_file(parent=None) -> str | None:
     path, _ = QFileDialog.getOpenFileName(parent,"Select hosts file",default_hosts_path(),"All Files (*)")
     return path or None
 
+"""
+    Finds the resource path of the current root directory
+
+    Paramaters
+    ---------------
+    rel : String
+        the relative path of the current asset to be accessed
+    
+    Returns
+    ---------------
+    String
+        A string that represents the current full resource path of the
+        root directory + relative path to form the full resource path
+"""
 def resource_path(rel):
     base = getattr(sys, "_MEIPASS", os.path.dirname(os.path.abspath(__file__)))
     return os.path.join(base, rel)
 
+"""
+    Flushes the DNS of the current user's operating system, ensuring instant operating system changes
+    and immediate feedback upon blocking or canceling within the software
+"""
 def flushdns():
     try:
         result = subprocess.run(
@@ -37,13 +81,29 @@ def flushdns():
         print(f"Error occurred (Exit Code {e.returncode}):")
         print(e.stderr)
 
+"""
+    Checks if the user is an admin, and if not, prompts them to give the software elevated permissions
+"""
 def is_admin():
     try:
         return ctypes.windll.shell32.IsUserAnAdmin()
     except:
         return False
     
+"""
+    Gets the amount of time
 
+    Paramaters
+    ---------------
+    duration : int
+        the duration of blocktime to convert to minutes and hours
+    
+    Returns
+    ---------------
+    list
+        a list of strings 'hourstr' and 'minutestr' describing the relative 
+        hour and minute of a duration
+"""
 def getTime(duration):
     hours = duration // 3600
     minutes = (duration % 3600) // 60
@@ -60,12 +120,30 @@ def getTime(duration):
 
     return [f'{hourStr}',f'{minuteStr}']
 
+"""
+    Writes the lines to the provided hosts file, beginning to block selected programs
 
+    Paramaters
+    ---------------
+    filepath : String
+        The path of the hosts file to open and write to
+    block_string : String
+        The string to write into the hosts file
+"""
 def block(filepath, block_string):
     print(f'blocking discord in filepath: {filepath}')
     with open(filepath, "a") as file:
         file.writelines(block_string);
 
+"""
+    Uses block tags to identify lines that should be skipped, to rewrite the hosts
+    file without added changes
+
+    Paramaters
+    ---------------
+    filepath : String
+        The path of the hosts file to open and write to
+"""
 def unblock(filepath):
     BLOCK_TAGS = ("#discord-blocker", "#instagram-blocker", "#twitter-blocker", "#youtube-blocker", "facebook-blocker", "tiktok-blocker", "bsky-blocker")
     with open(filepath, "r") as file:
@@ -83,7 +161,100 @@ def unblock(filepath):
         
 
 class MainWindow(QMainWindow, Ui_MainWindow):
+    """
+    A class used to represent the main window of the App Blocker PySide6 GUI.
+ 
+    The window lets a user select a set of sites/apps to block (by
+    writing entries to the system's hosts file), choose a blocking
+    duration (either a fixed duration or an end time), and start/cancel
+    a timed blocking session. While a session is active, a progress bar
+    and countdown label are shown and updated with a timer that ticks
+    once per second.
+ 
+    ...
+ 
+    Attributes
+    ----------
+    duration : int
+        The length of the current blocking session in seconds. Set via
+        duration_edit_changed or end_time_edit_change.
+    end_time : float
+        The time.monotonic() timestamp at which the current blocking
+        session should end. Set when blocking begins.
+    block_timer : PySide6.QtCore.QTimer
+        A one-second-interval timer used to update the progress bar and
+        countdown label, and to detect when a blocking session has
+        finished.
+    cancel : bool
+        Unused flag reserved for signaling a user-initiated cancellation.
+    block_string : str
+        The most recently built block of hosts file entries (see
+        build_string), corresponding to whichever services are
+        currently checked.
+    blockOpts : dict of str -> str
+        Maps each supported service key (e.g. 'twitter', 'discord')
+        to the hosts file block_string that block that service.
+    blockStatus : dict of str -> bool
+        Maps each supported service key to whether the user has checked
+        it for blocking.
+    filepath : str
+        The filesystem path to the hosts file that will be modified.
+        Defaults to the platform's standard hosts path and can be
+        changed via folder_clicked.
+ 
+    Methods
+    -------
+    folder_clicked()
+        Opens a file picker so the user can select a custom hosts file
+        and validates the selection.
+    build_string()
+        Builds the combined hosts file block string from all
+        currently checked services.
+    discord_toggled()
+        Syncs blockStatus['discord'] with the Discord checkbox state.
+    twitter_toggled()
+        Syncs blockStatus['twitter'] with the Twitter/X checkbox state.
+    instagram_toggled()
+        Syncs blockStatus['instagram'] with the Instagram checkbox state.
+    youtube_toggled()
+        Syncs blockStatus['youtube'] with the YouTube checkbox state.
+    tiktok_toggled()
+        Syncs blockStatus['tiktok'] with the TikTok checkbox state.
+    facebook_toggled()
+        Syncs blockStatus['facebook'] with the Facebook checkbox state.
+    bsky_toggled()
+        Syncs blockStatus['bsky'] with the Bluesky checkbox state.
+    cancel_blocking_clicked()
+        Ends the current blocking session early.
+    on_block_tick(sound=None)
+        Updates the progress bar/label each second and ends the session
+        once time has elapsed.
+    begin_blocking_clicked()
+        Builds the block string, writes it to the hosts file, and starts
+        the countdown timer.
+    end_blocking()
+        Stops the timer, restores the hosts file, flushes DNS, and
+        resets the UI to its idle state.
+    duration_edit_changed()
+        Recomputes duration from the "duration" time-edit widget.
+    seconds_until(qtime)
+        Computes the number of seconds from now until a given time of
+        day.
+    end_time_edit_changed()
+        Recomputes duration from the "end time" time-edit widget.
+    closeEvent(event)
+        Ensures blocking is cleanly ended if the window is closed while
+        a session is active.
+    """
     def __init__(self):
+        """
+        Initialize the main window.
+ 
+        Loads the compiled UI, initializes blocking state (timer,
+        duration,  options/status, and hosts file path), wires up 
+        all widget signals to their handler methods, and sets the
+        initial visibility/enabled state of window controls.
+        """
         super().__init__()
 
         # use compiled ui
@@ -200,7 +371,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if (value):
                 block_string += self.blockOpts[key]
 
-        print(f"The constructed block string is now:\n---------------------------------------\n{block_string}\n---------------------------------------")
         return block_string
 
     # ---------------------------------------------------------------------------------
@@ -257,7 +427,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def begin_blocking_clicked(self):
         self.block_string = self.build_string()
         self.startButton.setDisabled(True)
-        #print(self.block_string)
 
         print(f"Begin Blocking...")
 
@@ -307,8 +476,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def end_time_edit_changed(self):
         now = datetime.now()
 
-        print("heyyyy")
-        print(datetime.now().time())
         self.duration = self.seconds_until(self.endTimeEdit.time())
 
         if (self.duration > 0 and not (self.validPathIcon.isHidden())):
@@ -331,10 +498,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         
 
 
-'''
+"""
     Main method, checks for admin priviledge, grants it if not available, and blocks access
     starts timer, and ends block after sleep period.
-'''
+"""
 if __name__ == "__main__": 
     # You need one QApplication instance per application.
     # Passing sys.argv allows command line args for the application.
